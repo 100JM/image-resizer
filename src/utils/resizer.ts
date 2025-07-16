@@ -37,7 +37,6 @@ const browserResizer = (
     } = {}
 ) => {
     return new Promise((resolve, reject) => {
-        console.log('resizer 시작');
 
         const { 
             quality = 0.7, 
@@ -62,6 +61,8 @@ const browserResizer = (
                 try {
                     let width = img.width;
                     let height = img.height;
+                    let originalWidth = img.width;
+                    let originalHeight= img.height;
 
                     if (width > height) {
                         if (width > maxWidth) {
@@ -86,10 +87,31 @@ const browserResizer = (
                     width = Math.max(Math.round(width), 1);
                     height = Math.max(Math.round(height), 1);
 
-                    resolve({
-                        width,
-                        height,
-                    });
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    const ctx = canvas.getContext('2d');
+
+                    if (!ctx) {
+                        throw new Error('Failed to get canvas context');
+                    }
+
+                    ctx.imageSmoothingEnabled = imageSmoothingEnabled ?? true;
+                    ctx.imageSmoothingQuality = imageSmoothingQuality ?? 'high';
+
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    canvas.toBlob((blob) => {
+                        resolve({
+                            blob,
+                            width,
+                            height,
+                            originalWidth,
+                            originalHeight
+                        });
+                    }, `image/${format}`, quality);
+
 
                 } catch (error) {
                     reject(error);
@@ -124,22 +146,16 @@ const nodeResizer = (
     maxHeight: number,
     options: {
         quality?: number;
-        format?: 'jpeg' | 'png' | 'webp';
         imageSmoothingEnabled?: boolean;
-        imageSmoothingQuality?: 'low' | 'medium' | 'high';
     } = {}
 ) => {
 
     return new Promise((resolve, reject) => {
-        console.log('resizer 시작');
 
         const { 
             quality = 0.7, 
-            format = 'jpeg', 
             imageSmoothingEnabled = true,
         } = options;
-
-        console.log(options);
 
         const isFile = file instanceof File;
         const isBuffer = Buffer.isBuffer(file);
@@ -156,6 +172,8 @@ const nodeResizer = (
             try {
                 let width = img.width;
                 let height = img.height;
+                let originalWidth = img.width;
+                let originalHeight= img.height;
 
                 if (width > height) {
                     if (width > maxWidth) {
@@ -182,14 +200,20 @@ const nodeResizer = (
 
                 const canvas = createCanvas(width, height);
                 const ctx = canvas.getContext('2d');
-                ctx.imageSmoothingEnabled = options.imageSmoothingEnabled || true;
+                ctx.imageSmoothingEnabled = imageSmoothingEnabled || true;
 
                 ctx.drawImage(img, 0, 0, width, height);
-
+                
+                const buffer = canvas.toBuffer('image/jpeg', {
+                    quality: quality * 100
+                });
 
                 resolve({
+                    buffer,
                     width,
                     height,
+                    originalWidth,
+                    originalHeight
                 });
 
             } catch (error) {
