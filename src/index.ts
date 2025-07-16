@@ -1,0 +1,1 @@
+export { resizer } from './utils/resizer';

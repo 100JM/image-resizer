@@ -1,0 +1,37 @@
+{
+  "name": "image-resizer",
+  "version": "1.0.0",
+  "description": "resize image function",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/100JM/image-resizer.git"
+  },
+  "keywords": [
+    "resize",
+    "image",
+    "typescript",
+    "photo",
+    "thumbnail",
+    "resizer"
+  ],
+  "author": "bjm",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/100JM/image-resizer/issues"
+  },
+  "homepage": "https://github.com/100JM/image-resizer#readme",
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.0.13",
+    "canvas": "^3.1.2",
+    "jest": "^30.0.4",
+    "jest-environment-jsdom": "^30.0.4",
+    "jsdom": "^26.1.0",
+    "ts-jest": "^29.4.0",
+    "typescript": "^5.8.3"
+  }
+}
