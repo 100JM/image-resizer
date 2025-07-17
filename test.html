@@ -53,7 +53,7 @@
         <h2>기능 테스트</h2>
         <button onclick="testBasicFunction()">기본 기능 테스트</button>
         <button onclick="testDifferentSizes()">다양한 크기 테스트</button>
-        <div id="functionResult" class="result"></div>
+        <div id="functionResult" class="result" style="display: grid;"></div>
     </div>
 
     <script type="module">
@@ -63,13 +63,6 @@
         // 임시로 직접 함수 정의 (빌드 전 테스트용)
         const resizer = (file, maxWidth, maxHeight, quality = 0.7, format = 'jpeg', imageSmoothingEnabled = true, imageSmoothingQuality = 'high') => {
             return new Promise((resolve, reject) => {
-
-                // const {
-                //     quality = 0.7,
-                //     format = 'jpeg',
-                //     imageSmoothingEnabled = true,
-                //     imageSmoothingQuality = 'high'
-                // } = options;
 
                 const isFile = file instanceof File;
                 const isBuffer = false;
@@ -88,7 +81,7 @@
                             let width = img.width;
                             let height = img.height;
                             let originalWidth = img.width;
-                            let originalHeight= img.height;
+                            let originalHeight = img.height;
 
                             if (width > height) {
                                 if (width > maxWidth) {
@@ -193,9 +186,15 @@
 
                 // 미리보기 생성
                 const preview = document.createElement('img');
-                preview.src = URL.createObjectURL(result.blob);
+                const url = URL.createObjectURL(result.blob);
+                preview.src = url;
                 preview.style.maxWidth = '200px';
                 preview.style.marginTop = '10px';
+
+                preview.onload = () => {
+                    URL.revokeObjectURL(url);
+                }
+
                 resultDiv.appendChild(preview);
 
             } catch (error) {
@@ -225,6 +224,18 @@
                         <span class="success">기본 기능 테스트 성공!</span><br>
                         결과: ${result.width} x ${result.height}
                     `;
+
+                    const preview = document.createElement('img');
+                    const url = URL.createObjectURL(result.blob);
+                    preview.src = url;
+                    preview.style.maxWidth = '200px';
+                    preview.style.marginTop = '10px';
+
+                    preview.onload = () => {
+                        URL.revokeObjectURL(url);
+                    };
+
+                    resultDiv.appendChild(preview);
                 });
 
             } catch (error) {
@@ -248,7 +259,7 @@
                     const file = new File([blob], 'test.png', { type: 'image/png' });
 
                     const results = [];
-
+                    const blobResults = [];
                     // 다양한 크기로 테스트
                     const sizes = [
                         { width: 400, height: 300 },
@@ -257,14 +268,29 @@
                     ];
 
                     for (const size of sizes) {
-                        const result = await resizer(file, size.width, size.height);
+                        const result = await resizer(file, Math.floor((size.width / 2)), Math.floor(size.height / 2));
                         results.push(`${size.width}x${size.height} → ${result.width}x${result.height}`);
+                        blobResults.push(result.blob);
                     }
 
                     resultDiv.innerHTML = `
                         <span class="success">다양한 크기 테스트 성공!</span><br>
                         ${results.join('<br>')}
                     `;
+
+                    for (const r of blobResults) {
+                        let preview = document.createElement('img');
+                        const url = URL.createObjectURL(r);
+                        preview.src = url;
+                        preview.style.maxWidth = '200px';
+                        preview.style.marginTop = '10px';
+
+                        preview.onload = () => {
+                            URL.revokeObjectURL(url);
+                        };
+
+                        resultDiv.appendChild(preview);
+                    }
                 });
 
             } catch (error) {

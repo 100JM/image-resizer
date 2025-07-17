@@ -1,5 +1,8 @@
 {
-  "name": "image-resizer",
+  "name": "@100jm/image-resizer",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "1.0.0",
   "description": "resize image function",
   "main": "dist/cjs/index.js",
@@ -16,7 +19,7 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "rimraf dist && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+    "build": "rimraf dist && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && node -e \"require('fs').writeFileSync('dist/mjs/package.json', JSON.stringify({type: 'module'})); require('fs').writeFileSync('dist/cjs/package.json', JSON.stringify({type: 'commonjs'}));\"",
     "dev": "tsc --watch",
     "prepublishOnly": "npm run build",
     "clean": "rm -rf dist"
