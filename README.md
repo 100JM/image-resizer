@@ -53,7 +53,7 @@ if (file) {
     
     // Use the resized image blob
     const img = document.createElement('img');
-    img.src = URL.createObjectURL(result.blob);
+    img.src = URL.createObjectURL(result.data);
     document.body.appendChild(img);
     
     console.log('Resized successfully:', result);
@@ -78,7 +78,7 @@ const result = await resizer(imageBuffer, 800, 600, {
 });
 
 // Save resized image
-writeFileSync('./output.jpg', result.buffer);
+writeFileSync('./output.jpg', result.data);
 console.log('Resized successfully:', result);
 ```
 
@@ -111,7 +111,7 @@ interface ResizeOptions {
 **Browser Environment:**
 ```typescript
 {
-  blob: Blob;           // Resized image as Blob
+  data: Blob;           // Resized image as Blob
   width: number;        // Final width
   height: number;       // Final height
   originalWidth: number; // Original width
@@ -122,7 +122,7 @@ interface ResizeOptions {
 **Node.js Environment:**
 ```typescript
 {
-  buffer: Buffer;       // Resized image as Buffer
+  data: Buffer;       // Resized image as Buffer
   width: number;        // Final width
   height: number;       // Final height
   originalWidth: number; // Original width
