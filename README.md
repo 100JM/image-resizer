@@ -1,4 +1,4 @@
-# image-resizer
+# @100jm/image-resizer
 
 A TypeScript library for resizing images in both browser and Node.js environments with automatic environment detection.
 
@@ -23,7 +23,7 @@ npm install @100jm/image-resizer
 ### Basic Usage
 
 ```typescript
-import { resizer } from 'image-resizer';
+import { resizer } from '@100jm/image-resizer';
 
 // Resize an image file
 const result = await resizer(imageFile, 800, 600, {
@@ -37,7 +37,7 @@ console.log(`Resized from ${result.originalWidth}x${result.originalHeight} to ${
 ### Browser Environment
 
 ```typescript
-import { resizer } from 'image-resizer';
+import { resizer } from '@100jm/image-resizer';
 
 // Handle file input
 const fileInput = document.getElementById('fileInput') as HTMLInputElement;
@@ -66,7 +66,7 @@ if (file) {
 ### Node.js Environment
 
 ```typescript
-import { resizer } from 'image-resizer';
+import { resizer } from '@100jm/image-resizer';
 import { readFileSync, writeFileSync } from 'fs';
 
 // Read image file
@@ -168,7 +168,7 @@ const webpResult = await resizer(imageFile, 800, 600, {
 ### Node.js with Buffer
 
 ```typescript
-import { resizer } from 'image-resizer';
+import { resizer } from '@100jm/image-resizer';
 
 const imageBuffer = Buffer.from('...'); // Your image buffer
 const result = await resizer(imageBuffer, 800, 600, {
