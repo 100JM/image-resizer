@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "resize image function",
   "main": "dist/cjs/index.js",
   "module": "dist/mjs/index.js",

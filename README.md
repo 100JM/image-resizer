@@ -15,7 +15,7 @@ A TypeScript library for resizing images in both browser and Node.js environment
 ## Installation
 
 ```bash
-npm install image-resizer
+npm install @100jm/image-resizer
 ```
 
 ## Usage
@@ -203,7 +203,7 @@ No manual configuration required!
 
 ```bash
 # Install dependencies
-npm install image-resizer
+npm install @100jm/image-resizer
 
 # Build the library (CommonJS + ES Modules)
 npm run build
