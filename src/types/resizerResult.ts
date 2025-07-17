@@ -1,13 +1,5 @@
-export type BrowserResizerResult = {
-    blob: Blob;
-    width: number;
-    height: number;
-    originalWidth: number;
-    originalHeight: number;
-};
-
-export type NodeResizerResult = {
-    buffer: Buffer;
+export type resizerResult = {
+    data: Blob | Buffer;
     width: number;
     height: number;
     originalWidth: number;
