@@ -1,5 +1,20 @@
-import { createCanvas, loadImage } from 'canvas';
+interface CanvasModule {
+    createCanvas: (width: number, height: number) => any;
+    loadImage: (src: Buffer | string) => Promise<any>;
+}
 
+let canvasModule: CanvasModule | null = null;
+
+async function getCanvasModule(): Promise<CanvasModule> {
+    if (!canvasModule) {
+        try {
+            canvasModule = await import('canvas');
+        } catch (error) {
+            throw new Error(`Canvas module not available: ${error}`);
+        }
+    }
+    return canvasModule;
+}
 
 export const resizer = (
     file: File | Buffer,
@@ -38,9 +53,9 @@ const browserResizer = (
 ) => {
     return new Promise((resolve, reject) => {
 
-        const { 
-            quality = 0.7, 
-            format = 'jpeg', 
+        const {
+            quality = 0.7,
+            format = 'jpeg',
             imageSmoothingEnabled = true,
             imageSmoothingQuality = 'high'
         } = options;
@@ -62,7 +77,7 @@ const browserResizer = (
                     let width = img.width;
                     let height = img.height;
                     let originalWidth = img.width;
-                    let originalHeight= img.height;
+                    let originalHeight = img.height;
 
                     if (width > height) {
                         if (width > maxWidth) {
@@ -140,7 +155,7 @@ const browserResizer = (
     });
 };
 
-const nodeResizer = (
+const nodeResizer = async (
     file: File | Buffer,
     maxWidth: number,
     maxHeight: number,
@@ -149,11 +164,12 @@ const nodeResizer = (
         imageSmoothingEnabled?: boolean;
     } = {}
 ) => {
+    const { createCanvas, loadImage } = await getCanvasModule();
 
     return new Promise((resolve, reject) => {
 
-        const { 
-            quality = 0.7, 
+        const {
+            quality = 0.7,
             imageSmoothingEnabled = true,
         } = options;
 
@@ -173,7 +189,7 @@ const nodeResizer = (
                 let width = img.width;
                 let height = img.height;
                 let originalWidth = img.width;
-                let originalHeight= img.height;
+                let originalHeight = img.height;
 
                 if (width > height) {
                     if (width > maxWidth) {
@@ -203,7 +219,7 @@ const nodeResizer = (
                 ctx.imageSmoothingEnabled = imageSmoothingEnabled || true;
 
                 ctx.drawImage(img, 0, 0, width, height);
-                
+
                 const buffer = canvas.toBuffer('image/jpeg', {
                     quality: quality * 100
                 });
@@ -220,8 +236,6 @@ const nodeResizer = (
                 reject(error);
             }
 
-            img.onerror = () => reject(new Error('Image loading failed'));
-            img.src = dataUrl;
         };
 
         if (isFile) {
