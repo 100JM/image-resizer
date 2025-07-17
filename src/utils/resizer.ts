@@ -1,3 +1,5 @@
+import type { BrowserResizerResult, NodeResizerResult } from '../types/resizerResult';
+
 interface CanvasModule {
     createCanvas: (width: number, height: number) => any;
     loadImage: (src: Buffer | string) => Promise<any>;
@@ -51,7 +53,7 @@ const browserResizer = (
         imageSmoothingQuality?: 'low' | 'medium' | 'high';
     } = {}
 ) => {
-    return new Promise((resolve, reject) => {
+    return new Promise<BrowserResizerResult>((resolve, reject) => {
 
         const {
             quality = 0.7,
@@ -118,13 +120,15 @@ const browserResizer = (
                     ctx.drawImage(img, 0, 0, width, height);
 
                     canvas.toBlob((blob) => {
-                        resolve({
-                            blob,
-                            width,
-                            height,
-                            originalWidth,
-                            originalHeight
-                        });
+                        if (blob) {
+                            resolve({
+                                blob,
+                                width,
+                                height,
+                                originalWidth,
+                                originalHeight
+                            });
+                        }
                     }, `image/${format}`, quality);
 
 
@@ -166,7 +170,7 @@ const nodeResizer = async (
 ) => {
     const { createCanvas, loadImage } = await getCanvasModule();
 
-    return new Promise((resolve, reject) => {
+    return new Promise<NodeResizerResult>((resolve, reject) => {
 
         const {
             quality = 0.7,
