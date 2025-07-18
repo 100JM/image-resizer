@@ -1,2 +1,2 @@
 export { resizer } from './utils/resizer';
-export type { resizerResult } from './types/resizerResult';
+export type { ResizerResult } from './types/resizerResult';

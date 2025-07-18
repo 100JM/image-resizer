@@ -1,5 +1,5 @@
-export type resizerResult = {
-    data: Blob | Buffer;
+export type ResizerResult = {
+    data: Blob;
     width: number;
     height: number;
     originalWidth: number;

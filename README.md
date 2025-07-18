@@ -122,7 +122,7 @@ interface ResizeOptions {
 **Node.js Environment:**
 ```typescript
 {
-  data: Buffer;       // Resized image as Buffer
+  data: Blob;       // Resized image as Blob
   width: number;        // Final width
   height: number;       // Final height
   originalWidth: number; // Original width
@@ -174,8 +174,6 @@ const imageBuffer = Buffer.from('...'); // Your image buffer
 const result = await resizer(imageBuffer, 800, 600, {
   quality: 0.8
 });
-
-// result.buffer contains the resized image
 ```
 
 ## Environment Detection
