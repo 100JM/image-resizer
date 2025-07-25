@@ -1,5 +1,5 @@
 module.exports = {
-    preset: 'ts-jest',
+    preset: 'jest-puppeteer',
     testEnvironment: 'jsdom',
     testMatch: ['**/*.test.ts', '**/*.spec.ts'],
     testPathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/'],
